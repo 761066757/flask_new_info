@@ -10,6 +10,8 @@ from flask import Flask,session
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import CSRFProtect
 from flask_session import Session
+from flask_script import Manager
+from flask_migrate import Migrate, MigrateCommand
 
 app = Flask(__name__)
 
@@ -45,10 +47,14 @@ CSRFProtect(app)
 # 设置session保存指定位置
 Session(app)
 
+manager = Manager(app)
+Migrate(app, db)
+manager.add_command('db', MigrateCommand)
+
 @app.route('/')
 def index():
     session['name'] = 'liao'
     return 'index'
 
 if __name__ == '__main__':
-    app.run()
+    manager.run()
