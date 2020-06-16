@@ -8,10 +8,11 @@
 
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
-from info import app, db
 from flask import Flask, session
+from info import create_app,db
 
 # flask_script
+app = create_app('develop')
 manager = Manager(app)
 # 数据库迁移
 Migrate(app, db)

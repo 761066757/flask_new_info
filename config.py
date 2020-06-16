@@ -6,6 +6,7 @@
 # app 的创建在 info 下的__init__ 中
 # @Software: PyCharm
 import redis
+import logging
 
 class Config(object):
     """工程信息配置"""
@@ -27,6 +28,8 @@ class Config(object):
     SESSION_REDIS = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT)  # 使用 redis 的实例
     SESSION_PERMANENT = False
     PERMANENT_SESSION_LIFETIME = 86400  # session 的有效期，单位是秒
+     # 日志级别
+    LEVEL = logging.DEBUG
 
 # 开发环境
 class DevelopConfig(Config):
@@ -34,7 +37,7 @@ class DevelopConfig(Config):
 # 生产环境
 class ProductConfig(Config):
     DEBUG = False
-
+    LEVEL = logging.ERROR
 # 测试环境
 class TestingConfig(Config):
     TESTING = True
