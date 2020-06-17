@@ -5,6 +5,7 @@
 # @File    : manage.py 只负责基本的启动工作
 # app 的创建在 info 下的__init__ 中
 # @Software: PyCharm
+import redis
 from flask import Flask, session
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
@@ -15,7 +16,7 @@ from logging.handlers import RotatingFileHandler
 
 
 db = SQLAlchemy()
-
+redis_store = None
 
 def create_app(config_name):
     """通过传入不同的配置名,切换不同的环境"""
@@ -31,7 +32,9 @@ def create_app(config_name):
     db.init_app(app)
 
 # 初始化redis配置
-# redis.StrictRedis(host=Config.RDIES_HOST, port=Config.RDIES_PORT)
+# redis.StrictRedis(host=Config.REDIS_HOST, port=Config.REDIS_PORT)
+    global redis_store
+    redis_store = redis.StrictRedis(host=config.REDIS_HOST, port=config.REDIS_PORT)
 
 # 开启csrf 保护， 只用于服务器验证功能
     CSRFProtect(app)
