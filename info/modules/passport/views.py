@@ -16,7 +16,7 @@ from info import redis_store, constants
 
 
 # 发送短信验证码
-@passport_blu.route('/sms_code')
+@passport_blu.route('/sms_code', methods =['POST'])
 def get_sms_code():
     """
     :return:
