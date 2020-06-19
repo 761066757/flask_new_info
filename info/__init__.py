@@ -31,8 +31,8 @@ def create_app(config_name):
     # SQLAlchemy对象关联app
     db.init_app(app)
 
-# 初始化redis配置
-# redis.StrictRedis(host=Config.REDIS_HOST, port=Config.REDIS_PORT)
+    # 初始化redis配置
+    # redis.StrictRedis(host=Config.REDIS_HOST, port=Config.REDIS_PORT)
     global redis_store
     redis_store = redis.StrictRedis(host=config.REDIS_HOST, port=config.REDIS_PORT)
 
@@ -44,6 +44,7 @@ def create_app(config_name):
     # 注册蓝图时，导入和注册写在一起
     from info.modules.index import index_blu
     app.register_blueprint(index_blu)
+
     from info.modules.passport import passport_blu
     app.register_blueprint(passport_blu)
 
