@@ -16,9 +16,9 @@ class Config(object):
     # 数据库的配置信息
     SQLALCHEMY_DATABASE_URI = 'mysql://root:root@127.0.0.1:3306/information22'
     # 动态追踪设置
-    SQLALCHEMY_TRACK_MODUFICATIONS = True
+    SQLALCHEMY_TRACK_MODUFICATIONS = False
     # 显示原始sql
-    SQLALCHEMY_ECHO = True
+    # SQLALCHEMY_ECHO = True
 
     REDIS_HOST = "127.0.0.1"
     REDIS_PORT = 6379
