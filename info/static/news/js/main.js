@@ -104,7 +104,63 @@ $(function () {
     // TODO 登录表单提交
 
     // TODO 注册按钮点击
-   
+     $("register_form_con").submit(function (e) {
+        // 阻止默认提交操作, 不让其往默认的action提交
+        e.preventDefault()
+        // 取到用户输入的内容
+        var mobile = $("#register_mobile").val()
+        var sms_code = $("#smscode").val()
+        var password = $("#register_password").val()
+        // 判断是否为空
+        if (!mobile) {
+            $("register-mobile-err").show();
+            return;
+        }
+        if (!sms_code) {
+            $("register-sms-code-err").show();
+            return;
+        }
+        if (!password) {
+            $("register-password-err").html("请填写密码");
+            $("register-password-err").show();
+            return;
+        }
+        if (password.length < 6) {
+            $("register-password-err").html("密码长度不能少于6位");
+
+            $("register-password-err").show();
+            return;
+        }
+
+        // 发起注册请求
+        //拼接参数
+        var params = {
+            "mobile": mobile,
+            "sms_code": sms_code,
+            "password": password
+        }
+
+        $.ajax({
+            url: '/passport/register',//请求地址
+            type: 'post',
+            data: JSON.stringify(params),
+            contentType: 'application/json',
+            headers: {'X-CSRFToken': getCookie('csrf_token')},
+            success: function (resp) {
+                //判断是否请求成功
+                if (resp.errno == '0') {
+                    // 重新加载当前页面即可
+                    window.location.reload()
+
+                } else {//发送失败
+                    alert(resp.errmsg);
+                }
+            }
+        })
+
+
+    })
+
 //退出登陆
 function logout() {
     $.ajax({
