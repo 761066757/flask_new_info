@@ -5,13 +5,13 @@
 # @File    : views.py
 # @Software: PyCharm
 
-from flask import render_template
 # 蓝图
-from . import index_blu
-from flask import render_template, current_app, session
-from info.models import User
+
+from flask import render_template, current_app, session ,request, jsonify
 from info import constants
-from info.models import User, News
+from info.models import User, News, Category
+from info.utils.response_code import RET
+from . import index_blu
 
 @index_blu.route('/')
 def index():
@@ -27,21 +27,28 @@ def index():
         except Exception as e:
             current_app.logger.error(e)
 
-        try:
-            news_list = News.query.order_by(News.clicks.desc()).limit(constants.CLICK_RANK_MAX_NEWS)
-        except Exception as e:
-            current_app.logger.error(e)
-        click_news_list = []
-        for news in news_list if news_list else []:
-            click_news_list.append(news.to_basic_dict())
-        data = {
-            "user_info": user.to_dict() if user else None,
-            "click_news_list": click_news_list,
-        }
+    try:
+        news_list = News.query.order_by(News.clicks.desc()).limit(constants.CLICK_RANK_MAX_NEWS)
+    except Exception as e:
+        current_app.logger.error(e)
+    click_news_list = []
+    for news in news_list if news_list else []:
+        click_news_list.append(news.to_basic_dict())
 
-        return render_template('news/index.html', data=data)
+    categories_dicts = []
+    "获取新闻分分类数据"
+    categories = Category.query.all()
+    for category in categories:
+        categories_dicts.append(category.to_dict())
 
-    return render_template('news/index.html', data={"user_info": user.to_dict() if user else None})
+    data = {
+        "user_info": user.to_dict() if user else None,
+        "click_news_list": click_news_list,
+        "categories": categories_dicts
+    }
+
+    return render_template('news/index.html', data=data)
+
 
 
 #浏览器在访问,在访问每个网站的时候,都会发送一个Get请求,向/favicon.ico地址获取logo
